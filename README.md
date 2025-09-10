@@ -1,69 +1,62 @@
-# React + TypeScript + Vite
+# Gimme What Lee Got – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend React app** for **Gimme What Lee Got**, built with **React + TypeScript + Vite**.
+It provides the interactive UI and consumes the Django REST API.
+---
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19 + TypeScript**
+- **Vite** (dev server & bundler)
+- **Axios** – API calls
+- **Ant Design / Bootstrap** – UI components
+- **React Router** – routing & navigation
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚙️ Setup & Run Locally
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1) Clone the repository
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/ramyozi/gimmewhatleegot-frontend.git
+cd gimmewhatleegot-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2) Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/ramyozi/gimmewhatleegot-frontend.git
+cd gimmewhatleegot-frontend
 ```
+
+### 3) Configure environment
+
+Create a `.env` file in the project root based on `.env.example`:
+```bash
+VITE_API_URL=http://127.0.0.1:8000/api
+```
+
+### 4) Run frontend
+
+```bash
+npm run dev
+```
+
+Frontend will be available at: [http://127.0.0.1:3000](http://127.0.0.1:3000)
+
+## Project Structure
+
+```
+gimmewhatleegot-frontend/
+├── src/
+│   ├── pages/       # React pages
+│   ├── layouts/     # Shared layouts (nav, etc.)
+│   ├── services/    # Axios API calls
+│   ├── router.tsx   # React Router config
+│   ├── App.tsx
+│   └── main.tsx
+└── package.json
+
+```
+
