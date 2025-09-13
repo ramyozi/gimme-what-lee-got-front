@@ -1,3 +1,10 @@
-const Login = () => <h1>Login Page</h1>;
+import LoginForm from "../components/services/accounts/form/login-form.tsx";
+
+const Login = () => {
+
+    return (
+        <LoginForm/>
+    )
+};
 
 export default Login;

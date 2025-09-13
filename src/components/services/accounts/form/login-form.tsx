@@ -1,26 +1,23 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { MDBInput, MDBBtn } from "mdb-react-ui-kit";
-import {loginRequest} from "../../../../services/api/account.ts";
+import {useAuth} from "../../../../lib/plugin/auth-provider.tsx";
 
 type LoginFormInputs = {
   username: string;
   password: string;
 };
 
-const LoginForm: React.FC<{ onLoginSuccess?: (token: string) => void }> = ({ onLoginSuccess }) => {
+const LoginForm: React.FC<{ onLoginSuccess?: () => void }> = ({ onLoginSuccess }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+    const {login} = useAuth()
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const response = await loginRequest(data);
-      const token = response.data.access;
-      console.log("Logged in token:", token);
-      alert("Login successful!");
-      if (onLoginSuccess) onLoginSuccess(token);
-    } catch (err: any) {
+        await login(data);
+      if (onLoginSuccess) onLoginSuccess();
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.response?.data?.detail || "Login failed");
     }
   };
 

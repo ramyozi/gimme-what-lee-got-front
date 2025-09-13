@@ -11,7 +11,7 @@ export const loginRequest = (data: any) => {
 };
 
 export const getMeRequest = (token: string) => {
-  return axios.get(`${API_BASE}/me/`, {
+  return axios.get(`${API_BASE}/auth/me/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
