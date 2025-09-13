@@ -15,3 +15,8 @@ export const getMeRequest = (token: string) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+export const refreshTokenRequest = async (refresh: string) => {
+  const response = await axios.post(`${API_BASE}/auth/token/refresh/`, { refresh });
+  return response.data;
+};

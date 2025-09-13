@@ -1,6 +1,8 @@
 import {createContext, useContext, useState, useEffect, type ReactNode} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {loginRequest} from "../../services/api/account.ts";
+import {type JwtPayload, parseJwt} from "../utils/jwt.ts";
 
 const API_BASE = import.meta.env.VITE_API_BASE as string;
 
@@ -43,13 +45,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (credentials: { username: string; password: string }) => {
     try {
-      const response = await axios.post<{ access: string }>(`${API_BASE}/auth/login/`, credentials);
-      const accessToken = response.data.access;
-      localStorage.setItem("site", accessToken);
-      setToken(accessToken);
+      const response = await loginRequest(credentials);
+      const { access, refresh } = response.data;
 
-      const me = await fetchMe(accessToken);
-      setUser(me);
+      setToken(access);
+      localStorage.setItem("access", access);
+      localStorage.setItem("refresh", refresh);
+      const decoded = parseJwt<JwtPayload>(access);
+      if (decoded) {
+        const mappedUser: User = {
+          id: decoded.user_id,
+          username: decoded.username,
+          role: decoded.role,
+        };
+        setUser(mappedUser);
+      }
+
 
       navigate("/"); // redirection après login
     } catch (error: unknown) {
@@ -93,6 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 };
 
 // Hook pour utiliser le contexte Auth
+/* eslint-disable react-refresh/only-export-components */
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
