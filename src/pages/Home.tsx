@@ -1,30 +1,17 @@
-import { useEffect, useState } from 'react'
-import { getCategories } from '../services/api/category'
-import { getItems } from '../services/api/item'
+import RegisterForm from "../components/services/accounts/form/register-form.tsx";
+import LoginForm from "../components/services/accounts/form/login-form.tsx";
 
 export default function Home() {
-  const [categories, setCategories] = useState<any[]>([])
-  const [items, setItems] = useState<any[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cats = await getCategories()
-      const its = await getItems()
-      setCategories(cats)
-      setItems(its)
-    }
-    fetchData()
-  }, [])
 
   return (
-    <div className="p-4">
-      <h1>Gimme What Lee Got</h1>
+ <div className="container mt-5">
+      <h2>Register</h2>
+      <RegisterForm />
 
-      <h2>Categories</h2>
-      <ul>{categories.map((c) => <li key={c.id}>{c.name}</li>)}</ul>
+      <hr />
 
-      <h2>Items</h2>
-      <ul>{items.map((i) => <li key={i.id}>{i.title}</li>)}</ul>
+      <h2>Login</h2>
+      <LoginForm onLoginSuccess={(t) => console.log('hello')} />
     </div>
   )
 }
