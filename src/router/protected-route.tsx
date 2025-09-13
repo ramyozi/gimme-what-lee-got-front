@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children, roles }: ProtectedRouteProps): JSX.Element => {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Chargement...</div>;
+  if (loading) return <div>Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
 
 if (roles && (!user?.role || !roles.includes(user.role))) {

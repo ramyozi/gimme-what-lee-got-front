@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   if (loading) {
-    return <div style={{ padding: 16 }}>Chargement de l'utilisateur...</div>;
+    return <div style={{ padding: 16 }}>Loading...</div>;
   }
 
   return (

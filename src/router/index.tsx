@@ -12,7 +12,7 @@ import ItemDetail from "../pages/ItemDetail";
 import CategoryDetail from "../pages/CategoryDetail";
 
 const withSuspense = (el: JSX.Element): JSX.Element => (
-  <Suspense fallback={<div>Chargement…</div>}>{el}</Suspense>
+  <Suspense fallback={<div>Loading…</div>}>{el}</Suspense>
 );
 
 export const router = createBrowserRouter(
