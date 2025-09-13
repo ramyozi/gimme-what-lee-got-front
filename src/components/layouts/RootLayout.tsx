@@ -1,16 +1,10 @@
-import {NavLink, Outlet} from 'react-router-dom'
+import { Outlet } from "react-router-dom";
+import AuthProvider from "../../lib/plugin/auth-provider.tsx";
 
 export default function RootLayout() {
-
   return (
-    <div>
-      <header>
-        <NavLink to="/">Home</NavLink>
-      </header>
-
-      <main style={{ padding: 16 }}>
-        <Outlet />
-      </main>
-    </div>
-  )
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  );
 }

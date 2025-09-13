@@ -1,3 +1,10 @@
-const Register = () => <h1>Register Page</h1>;
+import RegisterForm from "../components/services/accounts/form/register-form.tsx";
+
+const Register = () => {
+
+    return (
+        <RegisterForm/>
+    )
+};
 
 export default Register;
