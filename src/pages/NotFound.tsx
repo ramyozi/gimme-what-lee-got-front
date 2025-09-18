@@ -1,8 +1,10 @@
+import { Container, Title, Text } from "@mantine/core";
+
 export default function NotFound() {
   return (
-    <>
-      <h1>404</h1>
-      <p>We couldn’t find that page.</p>
-    </>
-  )
+    <Container mt="xl" ta="center">
+      <Title order={1}>404</Title>
+      <Text>We couldn’t find that page.</Text>
+    </Container>
+  );
 }
