@@ -1,18 +1,18 @@
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   description?: string;
 }
 
 export interface Person {
-  id: number;
+  id: string;
   name: string;
   bio?: string;
   website?: string;
 }
 
 export interface Item {
-  id: number;
+  id: string;
   title: string;
   description: string;
   category?: Category;
@@ -25,8 +25,15 @@ export interface Item {
   created_by?: User;
 }
 
+export interface SearchResponse {
+  results: Item[];
+  count: number;
+  next?: string;
+  previous?: string;
+}
+
 export interface User {
-  id: number;
+  id: string;
   username: string;
   first_name?: string;
   last_name?: string;
@@ -37,7 +44,7 @@ export interface User {
 export type InteractionType = 'like' | 'bookmark' | 'rating';
 
 export interface UserInteraction {
-  id: number;
+  id: string;
   user: User;
   item: Item;
   interaction_type: InteractionType;
