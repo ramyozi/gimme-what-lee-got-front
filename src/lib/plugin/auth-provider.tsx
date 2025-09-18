@@ -2,7 +2,6 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {loginRequest} from "../../services/api/account.ts";
-import {type JwtPayload, parseJwt} from "../utils/jwt.ts";
 
 const API_BASE = import.meta.env.VITE_API_BASE as string;
 
@@ -10,6 +9,8 @@ const API_BASE = import.meta.env.VITE_API_BASE as string;
 export interface User {
   id: number;
   username: string;
+  first_name?: string;
+  last_name?: string;
   email?: string;
   role?: string;
 }
@@ -31,7 +32,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>(localStorage.getItem("site") || null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("access") || null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,16 +52,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setToken(access);
       localStorage.setItem("access", access);
       localStorage.setItem("refresh", refresh);
-      const decoded = parseJwt<JwtPayload>(access);
-      if (decoded) {
-        const mappedUser: User = {
-          id: decoded.user_id,
-          username: decoded.username,
-          role: decoded.role,
-        };
-        setUser(mappedUser);
-      }
 
+      const me = await fetchMe(access);
+      setUser(me);
 
       navigate("/"); // redirection après login
     } catch (error: unknown) {
@@ -86,6 +80,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         } catch {
           logout();
         }
+      } else {
+        navigate('login')
       }
       setLoading(false);
     };
