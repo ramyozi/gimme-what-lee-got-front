@@ -1,76 +1,59 @@
-import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBTypography,
-  MDBInput,
-  MDBBtn,
-} from "mdb-react-ui-kit";
+import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../lib/plugin/auth-provider.tsx";
 
-type LoginFormInputs = {
+interface LoginFormInputs {
   username: string;
   password: string;
-};
+}
 
-const LoginForm: React.FC<{ onLoginSuccess?: () => void }> = ({ onLoginSuccess }) => {
+export default function LoginForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormInputs>();
-  const { login } = useAuth();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await login(data);
-      if (onLoginSuccess) onLoginSuccess();
-    } catch (err: unknown) {
-      console.error(err);
+      await login({ username: data.username, password: data.password });
+      navigate("/search");
+    } catch (err) {
+      console.error("Login failed", err);
     }
   };
 
   return (
-    <MDBContainer className="d-flex justify-content-center align-items-center vh-100">
-      <MDBCard style={{ maxWidth: "500px", width: "100%" }} className="shadow-4-strong">
-        <MDBCardBody>
-          <MDBTypography tag="h3" className="text-center mb-4" style={{ color: "#d32f2f" }}>
-            Welcome Back
-          </MDBTypography>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack>
+        <TextInput
+          label="Username"
+          placeholder="Enter username"
+          {...register("username", { required: "Username required" })}
+          error={errors.username?.message}
+        />
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <MDBInput
-              label="Username"
-              wrapperClass="mb-3"
-              {...register("username", { required: "Username required" })}
-            />
-            {errors.username && <p className="text-danger">{errors.username.message}</p>}
+        <PasswordInput
+          label="Password"
+          placeholder="Enter password"
+          {...register("password", { required: "Password required" })}
+          error={errors.password?.message}
+        />
 
-            <MDBInput
-              label="Password"
-              type="password"
-              wrapperClass="mb-3"
-              {...register("password", { required: "Password required" })}
-            />
-            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+        <Button type="submit" loading={isSubmitting} fullWidth>
+          Login
+        </Button>
 
-            <MDBBtn type="submit" block color="primary" className="mb-3">
-              Login
-            </MDBBtn>
-          </form>
-
-          <p className="text-center">
-            Don’t have an account?{" "}
-            <a href="/register" className="text-success fw-bold">
-              Register
-            </a>
-          </p>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+        <Text size="sm" ta="center" mt="sm">
+          First time here?{" "}
+          <Link to="/register" style={{ fontWeight: 600, color: "#1971c2" }}>
+            Register first
+          </Link>
+        </Text>
+      </Stack>
+    </form>
   );
-};
-
-export default LoginForm;
+}

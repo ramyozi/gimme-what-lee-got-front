@@ -8,8 +8,7 @@ import { ProtectedRoute } from "./protected-route";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import ItemDetail from "../pages/ItemDetail";
-import CategoryDetail from "../pages/CategoryDetail";
+import Search from "../pages/Search.tsx";
 
 const withSuspense = (el: JSX.Element): JSX.Element => (
   <Suspense fallback={<div>Loading…</div>}>{el}</Suspense>
@@ -22,8 +21,8 @@ export const router = createBrowserRouter(
       <Route index element={withSuspense(<Home />)} />
       <Route path="login" element={withSuspense(<Login />)} />
       <Route path="register" element={withSuspense(<Register />)} />
-      <Route path="item/:id" element={withSuspense(<ItemDetail />)} />
-      <Route path="category/:id" element={withSuspense(<CategoryDetail />)} />
+      <Route path="search" element={withSuspense(<Search />)} />
+
 
       {/* User protected */}
       <Route

@@ -1,82 +1,86 @@
 import { useForm } from "react-hook-form";
-import {
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBTypography,
-  MDBInput,
-  MDBBtn,
-} from "mdb-react-ui-kit";
+import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
+import {Link, useNavigate} from "react-router-dom";
 import { registerRequest } from "../../../../services/api/account.ts";
 
 type RegisterFormInputs = {
   username: string;
   email: string;
+  first_name: string;
+  last_name: string;
   password: string;
 };
 
 const RegisterForm: React.FC = () => {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<RegisterFormInputs>();
 
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
-      const response = await registerRequest(data);
-      console.log("Registered:", response.data);
-    } catch (err: unknown) {
+      await registerRequest({
+        ...data,
+      });
+      navigate("/login");
+    } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <MDBContainer className="d-flex justify-content-center align-items-center vh-100">
-      <MDBCard style={{ maxWidth: "500px", width: "100%" }} className="shadow-4-strong">
-        <MDBCardBody>
-          <MDBTypography tag="h3" className="text-center mb-4" style={{ color: "#6a1b9a" }}>
-            Create Account
-          </MDBTypography>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack>
+        <TextInput
+          label="Username"
+          placeholder="Choose a username"
+          {...register("username", { required: "Username required" })}
+          error={errors.username?.message}
+        />
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <MDBInput
-              label="Username"
-              wrapperClass="mb-3"
-              {...register("username", { required: "Username required" })}
-            />
-            {errors.username && <p className="text-danger">{errors.username.message}</p>}
+        <TextInput
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          {...register("email", { required: "Email required" })}
+          error={errors.email?.message}
+        />
 
-            <MDBInput
-              label="Email"
-              type="email"
-              wrapperClass="mb-3"
-              {...register("email", { required: "Email required" })}
-            />
-            {errors.email && <p className="text-danger">{errors.email.message}</p>}
+        <TextInput
+          label="First name"
+          placeholder="John"
+          {...register("first_name", { required: "First name required" })}
+          error={errors.first_name?.message}
+        />
 
-            <MDBInput
-              label="Password"
-              type="password"
-              wrapperClass="mb-3"
-              {...register("password", { required: "Password required" })}
-            />
-            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+        <TextInput
+          label="Last name"
+          placeholder="Doe"
+          {...register("last_name", { required: "Last name required" })}
+          error={errors.last_name?.message}
+        />
 
-            <MDBBtn type="submit" block color="warning" className="mb-3">
-              Register
-            </MDBBtn>
-          </form>
+        <PasswordInput
+          label="Password"
+          placeholder="Create a password"
+          {...register("password", { required: "Password required" })}
+          error={errors.password?.message}
+        />
 
-          <p className="text-center">
-            Already have an account?{" "}
-            <a href="/login" className="text-primary fw-bold">
-              Login
-            </a>
-          </p>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBContainer>
+        <Button type="submit" loading={isSubmitting} fullWidth color="yellow">
+          Register
+        </Button>
+
+        <Text size="sm" ta="center" mt="sm">
+          Already have an account?{" "}
+          <Link to="/login" style={{ fontWeight: 600, color: "#1971c2" }}>
+            Login
+          </Link>
+        </Text>
+      </Stack>
+    </form>
   );
 };
 
