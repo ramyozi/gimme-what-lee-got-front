@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { TextInput, PasswordInput, Button, Stack } from "@mantine/core";
-import {useAuth} from "../../../../lib/plugin/auth-provider.tsx";
-import {useNavigate} from "react-router-dom";
+import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../../lib/plugin/auth-provider.tsx";
 
 interface LoginFormInputs {
   username: string;
@@ -10,14 +10,17 @@ interface LoginFormInputs {
 
 export default function LoginForm() {
   const { login } = useAuth();
-  const navigate = useNavigate()
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormInputs>();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormInputs>();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const credentials = {username: data.username, password: data.password}
-      await login(credentials);
-      navigate('/search')
+      await login({ username: data.username, password: data.password });
+      navigate("/search");
     } catch (err) {
       console.error("Login failed", err);
     }
@@ -28,19 +31,28 @@ export default function LoginForm() {
       <Stack>
         <TextInput
           label="Username"
-          placeholder="Username"
+          placeholder="Enter username"
           {...register("username", { required: "Username required" })}
           error={errors.username?.message}
         />
+
         <PasswordInput
           label="Password"
-          placeholder="********"
+          placeholder="Enter password"
           {...register("password", { required: "Password required" })}
           error={errors.password?.message}
         />
-        <Button type="submit" loading={isSubmitting}>
+
+        <Button type="submit" loading={isSubmitting} fullWidth>
           Login
         </Button>
+
+        <Text size="sm" ta="center" mt="sm">
+          First time here?{" "}
+          <Link to="/register" style={{ fontWeight: 600, color: "#1971c2" }}>
+            Register first
+          </Link>
+        </Text>
       </Stack>
     </form>
   );

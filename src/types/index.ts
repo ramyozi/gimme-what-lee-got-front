@@ -7,8 +7,8 @@ export interface Category {
 export interface Person {
   id: string;
   name: string;
-  bio?: string;
-  website?: string;
+  bio?: string | null;
+  website?: string | null;
 }
 
 export interface Item {
@@ -32,13 +32,15 @@ export interface SearchResponse {
   previous?: string;
 }
 
+export type UserRole = 'member' | 'admin';
+
 export interface User {
   id: string;
   username: string;
   first_name?: string;
   last_name?: string;
   email?: string;
-  role?: string;
+  role?: UserRole;
 }
 
 export type InteractionType = 'like' | 'bookmark' | 'rating';
