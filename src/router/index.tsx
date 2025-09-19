@@ -1,8 +1,9 @@
-import { Suspense } from "react";
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+import {Suspense} from "react";
+import {createBrowserRouter, createRoutesFromElements, Route} from "react-router-dom";
 import RootLayout from "../components/layouts/RootLayout";
 import NotFound from "../pages/NotFound";
-import { ProtectedRoute } from "./protected-route";
+import {ProtectedRoute} from "./protected-route";
+import {RoleEnum} from "../types";
 
 // Lazy loading
 import Home from "../pages/Home";
@@ -28,8 +29,8 @@ export const router = createBrowserRouter(
       <Route
         path="interactions"
         element={withSuspense(
-          <ProtectedRoute roles={["member", "admin"]}>
-            {/*<Profile />*/}<></>
+          <ProtectedRoute roles={[RoleEnum.Member, RoleEnum.Admin]}>
+              {/*<Profile />*/}<></>
           </ProtectedRoute>
         )}
       />
@@ -38,7 +39,7 @@ export const router = createBrowserRouter(
       <Route
         path="admin-list"
         element={withSuspense(
-          <ProtectedRoute roles={["admin"]}>
+          <ProtectedRoute roles={[RoleEnum.Admin]}>
             {/*<AccountList /> Pas créé encore*/}<></>
           </ProtectedRoute>
         )}
