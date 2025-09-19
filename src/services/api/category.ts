@@ -14,3 +14,11 @@ export const getCategoryById = async (id: string): Promise<Category> => {
   const response = await axios.get<Category>(`${API_BASE}/catalog/category/${id}`);
   return response.data;
 };
+
+export const createCategory = async (data: {
+  name: string;
+  description?: string;
+}): Promise<Category> => {
+  const response = await axios.post(`${API_BASE}/catalog/category/`, data);
+  return response.data;
+};
