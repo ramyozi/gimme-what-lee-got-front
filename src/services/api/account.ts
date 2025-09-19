@@ -25,3 +25,9 @@ export const refreshTokenRequest = async (refresh: string) => {
   const response = await axios.post(`${API_BASE}/auth/token/refresh/`, { refresh });
   return response.data;
 };
+
+// màj le user connecté
+export const patchUserRequest = async (userId: string, data: Partial<User>): Promise<User> => {
+  const response = await axios.patch<User>(`${API_BASE}/accounts/${userId}/`, data);
+  return response.data;
+};
