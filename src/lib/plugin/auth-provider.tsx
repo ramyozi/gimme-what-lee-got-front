@@ -64,11 +64,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
-    localStorage.removeItem("site");
-    navigate("/login");
-  };
+  setToken(null);
+  setUser(null);
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+  navigate("/login");
+};
+
 
   // Vérification automatique du token au chargement
   useEffect(() => {
@@ -80,8 +82,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         } catch {
           logout();
         }
-      } else {
-        navigate('login')
       }
       setLoading(false);
     };
