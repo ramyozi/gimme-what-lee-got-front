@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Item } from '../../types';
+import type {Item, SearchResponse} from '../../types';
 
 const API_BASE = import.meta.env.VITE_API_BASE as string;
 
@@ -28,8 +28,17 @@ export const getBookmarkedItemsByUser = async (userId: string): Promise<Item[]> 
 };
 
 // Recupérer les resultats de la recherche (filtres et tris)
-export const searchItems = async (params: Record<string, any>): Promise<{ results: Item[], count: number }> => {
-  const response = await axios.get(`${API_BASE}/catalog/search/`, { params });
+export const searchItems = async (params: {
+  q?: string;
+  categories?: string[];
+  page?: number;
+}): Promise<SearchResponse> => {
+  const response = await axios.get(`${API_BASE}/catalog/item/`, {
+    params: {
+      search: params.q || '',
+      categories: params.categories?.join(',') || '',
+      page: params.page || 1,
+    },
+  });
   return response.data;
 };
-
