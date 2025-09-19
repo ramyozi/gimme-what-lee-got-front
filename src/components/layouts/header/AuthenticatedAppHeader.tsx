@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Avatar, Box, Button, Grid, Image, Menu, UnstyledButton} from '@mantine/core';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from '../../../lib/plugin/auth-provider.tsx';
-import {ChevronDown, LogOut, Settings} from 'lucide-react';
+import {ChevronDown, LogOut, Settings, User} from 'lucide-react';
 import ThemeSwitch from "../ThemeSwitch.tsx";
 
 export default function AuthenticatedAppHeader() {
@@ -51,10 +51,12 @@ export default function AuthenticatedAppHeader() {
                         </Menu.Target>
 
                         <Menu.Dropdown>
+                            <Menu.Item leftSection={<User size={16}/>} onClick={() => navigate('/profile')}>
+                                Profile
+                            </Menu.Item>
                             <Menu.Item leftSection={<Settings size={16}/>} onClick={() => navigate('/settings')}>
                                 Settings
                             </Menu.Item>
-
                             <Menu.Item leftSection={<LogOut size={16}/>} onClick={logout} color="red">
                                 Logout
                             </Menu.Item>

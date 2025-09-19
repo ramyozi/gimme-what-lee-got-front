@@ -10,6 +10,7 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Search from "../pages/Search.tsx";
+import Profile from "../pages/Profile.tsx";
 
 const withSuspense = (el: JSX.Element): JSX.Element => (
   <Suspense fallback={<div>Loading…</div>}>{el}</Suspense>
@@ -27,10 +28,10 @@ export const router = createBrowserRouter(
 
       {/* User protected */}
       <Route
-        path="interactions"
+        path="profile"
         element={withSuspense(
           <ProtectedRoute roles={[RoleEnum.Member, RoleEnum.Admin]}>
-              {/*<Profile />*/}<></>
+              <Profile />
           </ProtectedRoute>
         )}
       />
