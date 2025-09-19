@@ -32,7 +32,10 @@ export interface SearchResponse {
   previous?: string;
 }
 
-export type UserRole = 'member' | 'admin';
+export enum RoleEnum {
+  Admin = 'admin',
+  Member = 'user'
+}
 
 export interface User {
   id: string;
@@ -40,7 +43,7 @@ export interface User {
   first_name?: string;
   last_name?: string;
   email?: string;
-  role?: UserRole;
+  role?: RoleEnum;
 }
 
 export type InteractionType = 'like' | 'bookmark' | 'rating';
