@@ -2,18 +2,9 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {loginRequest} from "../../services/api/account.ts";
+import {type User} from "../../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE as string;
-
-// Type pour l'utilisateur
-export interface User {
-  id: number;
-  username: string;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  role?: string;
-}
 
 // Type du contexte
 interface AuthContextType {
