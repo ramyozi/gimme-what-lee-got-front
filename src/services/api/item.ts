@@ -33,12 +33,15 @@ export const searchItems = async (params: {
   categories?: string[];
   page?: number;
 }): Promise<SearchResponse> => {
-  const response = await axios.get(`${API_BASE}/catalog/item/`, {
+  const response = await axios.get(`${API_BASE}/catalog/search/`, {
     params: {
       search: params.q || '',
-      categories: params.categories?.join(',') || '',
+      categories: params.categories && params.categories.length > 0
+        ? params.categories.join(',')
+        : undefined,
       page: params.page || 1,
     },
   });
+
   return response.data;
 };
