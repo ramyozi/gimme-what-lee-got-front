@@ -5,8 +5,11 @@ export const SwrProvider = ({ children }: any) => {
   return (
     <SWRConfig
       value={{
-        fetcher: apiClient.getFetcher(),
-      }}
+              fetcher: apiClient.getFetcher(),
+              revalidateOnFocus: false,
+              keepPreviousData: true,
+              dedupingInterval: 10000,
+        }}
     >
       {children}
     </SWRConfig>
