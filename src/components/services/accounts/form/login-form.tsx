@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../lib/plugin/auth-provider.tsx";
+import {useAuth} from "../../../../lib/plugin/auth-provider/use-auth.ts";
 
 interface LoginFormInputs {
   username: string;
@@ -19,7 +19,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await login({ username: data.username, password: data.password });
+      await login(data.username, data.password);
       navigate("/search");
     } catch (err) {
       console.error("Login failed", err);

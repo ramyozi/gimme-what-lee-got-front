@@ -1,6 +1,6 @@
 import { Box, Grid, Card, Stack, Title, Button, Text } from '@mantine/core';
-import { useAuth } from '../lib/plugin/auth-provider';
 import UserUpdateForm from "../components/services/accounts/form/user-update-form.tsx";
+import {useAuth} from "../lib/plugin/auth-provider/use-auth.ts";
 
 export default function Profile() {
   const { user, logout } = useAuth();

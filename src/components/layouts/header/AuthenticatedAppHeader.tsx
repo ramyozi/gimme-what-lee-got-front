@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import {Avatar, Box, Button, Grid, Image, Menu, UnstyledButton} from '@mantine/core';
 import {useNavigate} from 'react-router-dom';
-import {useAuth} from '../../../lib/plugin/auth-provider.tsx';
 import {ChevronDown, LogOut, Settings, User} from 'lucide-react';
 import ThemeSwitch from "../ThemeSwitch.tsx";
+import {useAuth} from "../../../lib/plugin/auth-provider/use-auth.ts";
 
 export default function AuthenticatedAppHeader() {
     const {user, logout} = useAuth();

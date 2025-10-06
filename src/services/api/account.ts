@@ -1,33 +1,43 @@
-import axios from 'axios';
 import type { User } from '../../types';
+import {apiClient} from "../../lib/plugin/auth-provider/api-client.tsx";
 
-const API_BASE = import.meta.env.VITE_API_BASE as string;
+export interface LoginData {
+  username: string;
+  password: string;
+}
+
+export interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+}
 
 // Inscription
-export const registerRequest = (data: any) => {
-  return axios.post(`${API_BASE}/auth/register/`, data);
+export const registerRequest = async (data: RegisterData) => {
+  const response = await apiClient.post('/auth/register/', data);
+  return response.data;
 };
 
 // Connexion
-export const loginRequest = (data: any) => {
-  return axios.post(`${API_BASE}/auth/login/`, data);
+export const loginRequest = async (data: LoginData) => {
+  const response = await apiClient.post('/auth/login/', data);
+  return response.data; // { access, refresh }
 };
 
 // Récupérer l'utilisateur connecté
-export const getMeRequest = (token: string): Promise<User> => {
-  return axios.get<User>(`${API_BASE}/auth/me/`, {
-    headers: { Authorization: `Bearer ${token}` },
-  }).then(res => res.data);
+export const getMe = async (): Promise<User> => {
+  const response = await apiClient.get<User>('/auth/me/');
+  return response.data;
 };
 
 // Rafraîchir le token
 export const refreshTokenRequest = async (refresh: string) => {
-  const response = await axios.post(`${API_BASE}/auth/token/refresh/`, { refresh });
+  const response = await apiClient.post('/auth/token/refresh/', { refresh });
   return response.data;
 };
 
 // màj le user connecté
 export const patchUserRequest = async (userId: string, data: Partial<User>): Promise<User> => {
-  const response = await axios.patch<User>(`${API_BASE}/accounts/${userId}/`, data);
+  const response = await apiClient.patch<User>(`/auth/users/${userId}/`, data);
   return response.data;
 };

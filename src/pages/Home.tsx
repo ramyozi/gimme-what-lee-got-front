@@ -1,11 +1,11 @@
-import {useAuth} from "../lib/plugin/auth-provider.tsx";
+import {useAuth} from "../lib/plugin/auth-provider/use-auth.ts";
 
 export default function Home() {
 
     const {logout, user} = useAuth()
 
     const handleLogout = async ()=>{
-        await logout()
+        logout()
     }
 
   return (

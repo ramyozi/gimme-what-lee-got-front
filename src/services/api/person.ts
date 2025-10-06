@@ -1,16 +1,16 @@
-import axios from "axios";
-import type {Person} from "../../types";
+import type { Person } from '../../types';
+import {apiClient} from "../../lib/plugin/auth-provider/api-client.tsx";
 
-const API_BASE = import.meta.env.VITE_API_BASE as string;
-
+// Récupérer toutes les personnes
 export const getPeople = async (limit?: number): Promise<Person[]> => {
-  const response = await axios.get<Person[]>(`${API_BASE}/catalog/person/`, {
+  const res = await apiClient.get<Person[]>('/catalog/person/', {
     params: limit ? { limit } : {},
   });
-  return response.data;
+  return res.data;
 };
 
+// Récupérer une personne par ID
 export const getPersonById = async (id: string): Promise<Person> => {
-  const response = await axios.get<Person>(`${API_BASE}/catalog/person/${id}`);
-  return response.data;
+  const res = await apiClient.get<Person>(`/catalog/person/${id}/`);
+  return res.data;
 };
