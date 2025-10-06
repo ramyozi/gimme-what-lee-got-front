@@ -23,6 +23,9 @@ export interface Item {
   producers?: Person[];
   contributors?: Person[];
   created_by?: User;
+  rating?: number;
+  number_of_ratings?: number;
+  popularity_score?: number;
 }
 
 export interface SearchResponse {
