@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Search from "../pages/Search.tsx";
 import Profile from "../pages/Profile.tsx";
+import ItemDetail from "../pages/ItemDetail.tsx";
 
 const withSuspense = (el: JSX.Element): JSX.Element => (
   <Suspense fallback={<div>Loading…</div>}>{el}</Suspense>
@@ -24,7 +25,7 @@ export const router = createBrowserRouter(
       <Route path="login" element={withSuspense(<Login />)} />
       <Route path="register" element={withSuspense(<Register />)} />
       <Route path="search" element={withSuspense(<Search />)} />
-
+        <Route path="item/:id" element={withSuspense(<ItemDetail />)} />
 
       {/* User protected */}
       <Route

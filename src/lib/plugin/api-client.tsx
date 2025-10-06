@@ -62,5 +62,5 @@ export class ApiClient {
 }
 
 export const apiClient = new ApiClient({
-  baseUrl: import.meta.env.VITE_API_BASE as string,
+  baseUrl: import.meta.env.VITE_API_BASE as string,    
 });
