@@ -8,7 +8,7 @@ export const createInteraction = async (
     type: 'like' | 'bookmark' | 'rating',
     rating?: number
 ): Promise<UserInteraction> => {
-  const res = await apiClient.post<UserInteraction>('/interaction/', {
+  const res = await apiClient.post<UserInteraction>('/catalog/interaction/', {
     user: userId,
     item: itemId,
     interaction_type: type,
@@ -19,5 +19,20 @@ export const createInteraction = async (
 
 // Supprimer une interaction
 export const deleteInteraction = async (interactionId: string): Promise<void> => {
-  await apiClient.delete(`/interaction/${interactionId}/`);
+  await apiClient.delete(`/catalog/interaction/${interactionId}/`);
+};
+
+
+/**
+ * fetch tous les interactions d'un utilisateur pour un item donné
+ * -> utile pour vérifier si un utilisateur a déjà liké ou bookmarké un item
+ */
+export const getUserItemInteractions = async (
+    userId: string,
+    itemId: string
+): Promise<UserInteraction[]> => {
+  const response = await apiClient.get<UserInteraction[]>(
+      `/catalog/interaction/user/${userId}/item/${itemId}/`
+  );
+  return response.data;
 };
