@@ -1,17 +1,19 @@
-import { SWRConfig } from 'swr';
-import {apiClient} from "./api-client.tsx";
+import { SWRConfig } from "swr";
+import type {ReactNode} from "react";
+import {swrFetcher} from "./auth-provider/api-client.tsx";
 
-export const SwrProvider = ({ children }: any) => {
-  return (
-    <SWRConfig
-      value={{
-              fetcher: apiClient.getFetcher(),
-              revalidateOnFocus: false,
-              keepPreviousData: true,
-              dedupingInterval: 10000,
-        }}
-    >
-      {children}
-    </SWRConfig>
-  );
-};
+// Fournit le fetcher global à toutes les requêtes SWR
+export function SwrProvider({ children }: { children: ReactNode }) {
+    return (
+        <SWRConfig
+            value={{
+                fetcher: swrFetcher,
+                revalidateOnFocus: false,
+                shouldRetryOnError: false,
+                keepPreviousData: true,
+            }}
+        >
+            {children}
+        </SWRConfig>
+    );
+}

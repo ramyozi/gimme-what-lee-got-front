@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../lib/plugin/auth-provider";
 import type {RoleEnum} from "../types";
+import {useAuth} from "../lib/plugin/auth-provider/use-auth.ts";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
