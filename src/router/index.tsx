@@ -12,8 +12,6 @@ const Register = React.lazy(() => import("../pages/Register"));
 const Search = React.lazy(() => import("../pages/Search"));
 const Profile = React.lazy(() => import("../pages/Profile"));
 const ItemDetail = React.lazy(() => import("../pages/ItemDetail"));
-const ItemCreateForm = React.lazy(() => import("../components/services/catalog/item/form/ItemCreateForm.tsx"));
-const ItemUpdateForm = React.lazy(() => import("../components/services/catalog/item/form/ItemUpdateForm.tsx"));
 
 const withSuspense = (el: JSX.Element): JSX.Element => (
   <Suspense fallback={<div>Loading…</div>}>{el}</Suspense>
@@ -42,18 +40,11 @@ export const router = createBrowserRouter(
 
       {/* Admin only */}
         <Route
-            path="item/new"
+            path="users"
             element={withSuspense(
                 <ProtectedRoute roles={[RoleEnum.Admin]}>
-                    <ItemCreateForm />
-                </ProtectedRoute>
-            )}
-        />
-        <Route
-            path="item/:id/edit"
-            element={withSuspense(
-                <ProtectedRoute roles={[RoleEnum.Admin]}>
-                    <ItemUpdateForm />
+                    <></>
+                    {/*<userList />*/}
                 </ProtectedRoute>
             )}
         />
