@@ -28,10 +28,11 @@ import ItemUpdateForm from "../components/services/catalog/item/form/ItemUpdateF
 import type { Item, UserInteraction } from "../types";
 import { useAuth } from "../lib/plugin/auth-provider/use-auth";
 import { notifications } from "@mantine/notifications";
+import ManagePeopleForItemForm from "../components/services/catalog/item/form/ManagePeopleForItemForm.tsx";
 
 enum ModalType {
     EDIT_ITEM = "EDIT_ITEM",
-    ADD_AUTHOR = "ADD_AUTHOR",
+    MANAGE_PEOPLE = "MANAGE_PEOPLE",
 }
 
 export default function ItemDetail() {
@@ -154,7 +155,7 @@ export default function ItemDetail() {
                                     <Button
                                         size="sm"
                                         variant="default"
-                                        onClick={() => openModal(ModalType.ADD_AUTHOR)}
+                                        onClick={() => openModal(ModalType.MANAGE_PEOPLE)}
                                     >
                                         Add Author
                                     </Button>
@@ -235,7 +236,7 @@ export default function ItemDetail() {
                 onClose={closeModal}
                 title={
                     (activeModal === ModalType.EDIT_ITEM && "Edit Item") ||
-                    (activeModal === ModalType.ADD_AUTHOR && "Add Author") ||
+                    (activeModal === ModalType.MANAGE_PEOPLE && "Manage People") ||
                     ""
                 }
                 centered
@@ -245,12 +246,12 @@ export default function ItemDetail() {
                 {activeModal === ModalType.EDIT_ITEM && (
                     <ItemUpdateForm item={item} onSuccess={closeModal} />
                 )}
-                {activeModal === ModalType.ADD_AUTHOR && (
-                    <Text color="dimmed" size="sm">
-                        TODO: Author form
-                    </Text>
+
+                {activeModal === ModalType.MANAGE_PEOPLE && (
+                    <ManagePeopleForItemForm item={item} onSuccess={closeModal} />
                 )}
             </Modal>
+
         </Paper>
     );
 }

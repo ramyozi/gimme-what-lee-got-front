@@ -20,7 +20,15 @@ export const createItem = async (data: Partial<Item>): Promise<Item> => {
 };
 
 // Mettre à jour un item
-export const updateItem = async (id: string, data: Partial<Item>): Promise<Item> => {
+type ItemUpdatePayload = Partial<
+    Omit<Item, "authors" | "producers" | "contributors">
+> & {
+  authors?: string[];
+  producers?: string[];
+  contributors?: string[];
+};
+
+export const updateItem = async (id: string, data: ItemUpdatePayload): Promise<Item> => {
   const res = await apiClient.patch<Item>(`/catalog/item/${id}/`, data);
   return res.data;
 };
