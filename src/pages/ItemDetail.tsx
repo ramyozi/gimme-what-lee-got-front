@@ -84,7 +84,7 @@ export default function ItemDetail() {
             }
 
             await refreshInteractions();
-            mutate([`/item/${id}`]);
+            mutate(() => true);
         } catch (e) {
             notifications.show({
                 title: "Error",

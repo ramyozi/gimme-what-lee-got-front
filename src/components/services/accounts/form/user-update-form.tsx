@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Box, TextInput, Button, Group } from '@mantine/core';
 import type {User} from "../../../../types";
 import {patchUserRequest} from "../../../../services/api/account.ts";
+import {mutate} from "swr";
+import {useAuth} from "../../../../lib/plugin/auth-provider/use-auth.ts";
 
 interface UserUpdateFormProps {
   user: User;
@@ -10,6 +12,7 @@ interface UserUpdateFormProps {
 }
 
 export default function UserUpdateForm({ user, userId, onSuccess }: UserUpdateFormProps) {
+    const { refreshUser } = useAuth();
   const [formData, setFormData] = useState({
     username: user.username,
     first_name: user.first_name,
@@ -25,7 +28,9 @@ export default function UserUpdateForm({ user, userId, onSuccess }: UserUpdateFo
   const handleSubmit = async () => {
     try {
       const updated = await patchUserRequest(userId, formData);
+      await refreshUser();
       onSuccess?.(updated);
+      mutate(() => true);
     } catch (err) {
       console.error('Failed to update user', err);
     } finally {

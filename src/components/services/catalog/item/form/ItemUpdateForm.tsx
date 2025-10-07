@@ -60,7 +60,7 @@ export default function ItemUpdateForm({ item, onSuccess }: ItemUpdateFormProps)
                 color: 'green',
             });
             onSuccess?.(updated);
-            mutate(['/item', item.id]);
+            mutate(() => true);
         } catch (err) {
             console.error(err);
             notifications.show({

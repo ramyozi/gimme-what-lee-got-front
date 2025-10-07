@@ -48,7 +48,7 @@ export default function CategorySelector({
       <Modal opened={opened} onClose={() => setOpened(false)} title="Create category">
         <CategoryCreateForm
           onCreated={(newCategory: Category) => {
-            mutate('/catalog/category/');
+            mutate(() => true);
 
             if (formHook && name) {
               formHook.setFieldValue(name, newCategory.id);
