@@ -1,26 +1,32 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import useSWR from 'swr';
-import { z } from 'zod';
-import { zodResolver } from 'mantine-form-zod-resolver';
-import { useForm } from '@mantine/form';
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import useSWR from "swr";
+import { z } from "zod";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { useForm } from "@mantine/form";
 import {
   TextInput,
   Button,
   Stack,
   Grid,
-  Loader,
+  Skeleton,
   Pagination,
   Paper,
   Group,
-} from '@mantine/core';
-import { searchItems } from '../services/api/item';
-import ItemCard from '../components/services/catalog/item/data/ItemCard';
-import CategoryMultiSelector from '../components/services/catalog/category/form/category-multi-selector';
-import type { SearchResponse } from '../types';
+  ActionIcon,
+  Tooltip,
+  Divider,
+  Text,
+} from "@mantine/core";
+import { Search as SearchIcon } from "tabler-icons-react";
+import { searchItems } from "../services/api/item";
+import ItemCard from "../components/services/catalog/item/data/ItemCard";
+import CategoryMultiSelector from "../components/services/catalog/category/form/category-multi-selector";
+import type { SearchResponse } from "../types";
+import {RotateCcw} from "lucide-react";
 
 const schema = z.object({
-  q: z.string().trim().max(200).optional().or(z.literal('')),
+  q: z.string().trim().max(200).optional().or(z.literal("")),
   categories: z.array(z.string()).default([]),
 });
 
@@ -29,9 +35,10 @@ type SearchForm = z.infer<typeof schema>;
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialQ = searchParams.get('q') ?? '';
-  const initialCats = searchParams.get('categories')?.split(',').filter(Boolean) ?? [];
-  const initialPage = Number(searchParams.get('page') ?? 1);
+  const initialQ = searchParams.get("q") ?? "";
+  const initialCats =
+      searchParams.get("categories")?.split(",").filter(Boolean) ?? [];
+  const initialPage = Number(searchParams.get("page") ?? 1);
 
   const form = useForm<SearchForm>({
     initialValues: { q: initialQ, categories: initialCats },
@@ -39,18 +46,22 @@ export default function Search() {
   });
 
   const [page, setPage] = useState(initialPage);
-  const [params, setParams] = useState<SearchForm>({ q: initialQ, categories: initialCats });
+  const [params, setParams] = useState<SearchForm>({
+    q: initialQ,
+    categories: initialCats,
+  });
 
   useEffect(() => {
     const urlParams: Record<string, string> = {};
     if (params.q) urlParams.q = params.q;
-    if (params.categories?.length) urlParams.categories = params.categories.join(',');
+    if (params.categories?.length)
+      urlParams.categories = params.categories.join(",");
     if (page > 1) urlParams.page = String(page);
     setSearchParams(urlParams, { replace: true });
   }, [params, page]);
 
   const swrKey = useMemo(
-      () => ['/search', params.q ?? '', (params.categories ?? []).join(','), page],
+      () => ["/search", params.q ?? "", (params.categories ?? []).join(","), page],
       [params.q, params.categories, page]
   );
 
@@ -58,8 +69,8 @@ export default function Search() {
       swrKey,
       () => searchItems({ q: params.q, categories: params.categories, page }),
       {
-        revalidateOnFocus: false, // Don’t reload on window refocus
-        keepPreviousData: true,   // Keep old data while fetching new
+        revalidateOnFocus: false,
+        keepPreviousData: true,
       }
   );
 
@@ -69,30 +80,68 @@ export default function Search() {
     setParams(parsed);
   };
 
-  const resultsLoading = isLoading || isValidating;
+  const handleReset = () => {
+    form.reset();
+    setParams({ q: "", categories: [] });
+    setPage(1);
+  };
+
+  const isFetching = isLoading || isValidating;
 
   return (
-      <Stack p="md" gap="md">
+      <Stack p="lg" gap="md">
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Group align="flex-end" gap="sm" wrap="nowrap">
+          <Group align="flex-end" gap="xs" wrap="nowrap">
             <TextInput
                 label="Search"
                 placeholder="Search items..."
-                {...form.getInputProps('q')}
-                style={{ flex: 1 }}
+                {...form.getInputProps("q")}
+                flex={1}
             />
-            <Button type="submit">Search</Button>
+            <CategoryMultiSelector
+                form={form}
+                name="categories"
+            />
+
+            <Tooltip label="Search">
+              <Button
+                  type="submit"
+                  leftSection={<SearchIcon size={16} />}
+                  loading={isFetching}
+              >
+                Search
+              </Button>
+            </Tooltip>
+
+            <Tooltip label="Reset filters">
+              <ActionIcon
+                  variant="light"
+                  color="gray"
+                  onClick={handleReset}
+                  disabled={isFetching}
+              >
+                <RotateCcw size={18} />
+              </ActionIcon>
+            </Tooltip>
           </Group>
-          <CategoryMultiSelector form={form} name="categories" />
         </form>
 
-        <Paper withBorder p="md">
-          {error && <div>Error loading items</div>}
-          {resultsLoading && (
-              <Group justify="center" p="md"><Loader /></Group>
+        <Divider variant="dashed" />
+
+        <Paper withBorder p="md" radius="md" shadow="sm">
+          {error && <Text color="red">Error loading items</Text>}
+
+          {!data && isFetching && (
+              <Grid>
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <Grid.Col key={i} span={{ base: 12, sm: 6, md: 4 }}>
+                      <Skeleton height={180} radius="md" />
+                    </Grid.Col>
+                ))}
+              </Grid>
           )}
 
-          {!resultsLoading && data?.results?.length ? (
+          {data?.results?.length ? (
               <Grid>
                 {data.results.map((item) => (
                     <Grid.Col key={item.id} span={{ base: 12, sm: 6, md: 4 }}>
@@ -100,10 +149,15 @@ export default function Search() {
                     </Grid.Col>
                 ))}
               </Grid>
-          ) : null}
-
-          {!resultsLoading && data && Array.isArray(data.results) && data.results.length === 0 && (
-              <div>No items found</div>
+          ) : (
+              !isFetching &&
+              data &&
+              Array.isArray(data.results) &&
+              data.results.length === 0 && (
+                  <Group justify="center" p="lg">
+                    <Text c="dimmed">No items found</Text>
+                  </Group>
+              )
           )}
 
           {data && data.count > 20 && (
