@@ -4,7 +4,7 @@ import { MultiSelect, Loader } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 import { ApiFilterBuilder, type Filter } from '../../../lib/utils/api-filter-builder';
 import type { PaginatedResponse } from '../../../types';
-import { apiClient } from '../../../lib/plugin/api-client.tsx';
+import {swrFetcher} from '../../../lib/plugin/auth-provider/api-client.tsx';
 
 interface Option {
   label: string;
@@ -55,8 +55,7 @@ export function SWRMultiSelect<T extends Record<string, any>>({
   }, [url, queryParams]);
 
   const { data, error, isLoading } = useSWR<PaginatedResponse<T>>(
-    queryUrl,
-    apiClient.getFetcher()
+    queryUrl, swrFetcher
   );
 
   const options: Option[] = useMemo(() => {

@@ -39,7 +39,7 @@ export default function CategoryMultiSelector({ form, name }: CategoryMultiSelec
       <Modal opened={opened} onClose={() => setOpened(false)} title="Create category">
         <CategoryCreateForm
           onCreated={(newCategory: Category) => {
-            mutate('/catalog/category/');
+            mutate(() => true);
             const current = form.getValues()[name] ?? [];
             form.setFieldValue(name, [...current, newCategory.id]);
             setOpened(false);

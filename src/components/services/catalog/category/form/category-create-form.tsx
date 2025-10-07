@@ -4,6 +4,7 @@ import { useForm } from '@mantine/form';
 import { TextInput, Button, Stack } from '@mantine/core';
 import type { Category } from '../../../../../types';
 import { createCategory } from '../../../../../services/api/category';
+import {mutate} from "swr";
 
 const schema = z.object({
   name: z.string().min(2, { message: 'Name should have at least 2 letters' }),
@@ -26,6 +27,7 @@ export default function CategoryCreateForm({ onCreated }: CategoryCreateFormProp
     try {
       const res = await createCategory(values);
       onCreated?.(res);
+      mutate(() => true);
       form.reset();
     } catch (error) {
       console.error('Failed to create category', error);

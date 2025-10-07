@@ -1,16 +1,28 @@
-import axios from "axios";
-import type {Person} from "../../types";
+import type { Person } from '../../types';
+import {apiClient} from "../../lib/plugin/auth-provider/api-client.tsx";
 
-const API_BASE = import.meta.env.VITE_API_BASE as string;
-
-export const getPeople = async (limit?: number): Promise<Person[]> => {
-  const response = await axios.get<Person[]>(`${API_BASE}/catalog/person/`, {
-    params: limit ? { limit } : {},
-  });
-  return response.data;
+// Récupérer toutes les personnes
+export const getAllPersons = async (): Promise<Person[]> => {
+  const res = await apiClient.get<Person[]>("/catalog/person/");
+  return res.data;
 };
 
+// Récupérer une personne par ID
 export const getPersonById = async (id: string): Promise<Person> => {
-  const response = await axios.get<Person>(`${API_BASE}/catalog/person/${id}`);
-  return response.data;
+  const res = await apiClient.get<Person>(`/catalog/person/${id}/`);
+  return res.data;
+};
+
+export const createPerson = async (data: Omit<Person, "id">): Promise<Person> => {
+  const res = await apiClient.post<Person>("/catalog/person/", data);
+  return res.data;
+};
+
+// Mettre à jour une personne
+export const updatePerson = async (
+    id: string,
+    data: Partial<Person>
+): Promise<Person> => {
+  const res = await apiClient.patch<Person>(`/catalog/person/${id}/`, data);
+  return res.data;
 };

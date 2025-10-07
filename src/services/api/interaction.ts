@@ -1,25 +1,38 @@
-import axios from 'axios';
 import type { UserInteraction } from '../../types';
-
-const API_BASE = import.meta.env.VITE_API_BASE as string;
+import {apiClient} from "../../lib/plugin/auth-provider/api-client.tsx";
 
 // Créer une interaction (like, bookmark, rating)
 export const createInteraction = async (
-  userId: string,
-  itemId: string,
-  type: 'like' | 'bookmark' | 'rating',
-  rating?: number
+    userId: string,
+    itemId: string,
+    type: 'like' | 'bookmark' | 'rating',
+    rating?: number
 ): Promise<UserInteraction> => {
-  const response = await axios.post<UserInteraction>(`${API_BASE}/interaction/`, {
+  const res = await apiClient.post<UserInteraction>('/catalog/interaction/', {
     user: userId,
     item: itemId,
     interaction_type: type,
     rating,
   });
-  return response.data;
+  return res.data;
 };
 
 // Supprimer une interaction
 export const deleteInteraction = async (interactionId: string): Promise<void> => {
-  await axios.delete(`${API_BASE}/interaction/${interactionId}/`);
+  await apiClient.delete(`/catalog/interaction/${interactionId}/`);
+};
+
+
+/**
+ * fetch tous les interactions d'un utilisateur pour un item donné
+ * -> utile pour vérifier si un utilisateur a déjà liké ou bookmarké un item
+ */
+export const getUserItemInteractions = async (
+    userId: string,
+    itemId: string
+): Promise<UserInteraction[]> => {
+  const response = await apiClient.get<UserInteraction[]>(
+      `/catalog/interaction/user/${userId}/item/${itemId}/`
+  );
+  return response.data;
 };

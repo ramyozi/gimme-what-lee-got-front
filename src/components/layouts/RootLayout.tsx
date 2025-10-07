@@ -1,12 +1,13 @@
-import { Outlet } from "react-router-dom";
-import AuthProvider from "../../lib/plugin/auth-provider.tsx";
 import AppHeaderWrapper from "./header/AppHeaderWrapper.tsx";
+import {Outlet} from "react-router-dom";
 
 export default function RootLayout() {
-  return (
-    <AuthProvider>
-      <AppHeaderWrapper />
-      <Outlet />
-    </AuthProvider>
-  );
+    return (
+        <>
+            <AppHeaderWrapper />
+            <main style={{ padding: '1rem' }}>
+                <Outlet />
+            </main>
+        </>
+    );
 }

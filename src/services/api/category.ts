@@ -1,24 +1,25 @@
-import axios from "axios";
-import type { Category } from "../../types";
+import { apiClient } from '../../lib/plugin/auth-provider/api-client.tsx';
+import type { Category } from '../../types';
 
-const API_BASE = import.meta.env.VITE_API_BASE as string;
-
+// Récupérer toutes les catégories
 export const getCategories = async (limit?: number): Promise<Category[]> => {
-  const response = await axios.get<Category[]>(`${API_BASE}/catalog/category/`, {
+  const res = await apiClient.get<Category[]>('/catalog/category/', {
     params: limit ? { limit } : {},
   });
-  return response.data;
+  return res.data;
 };
 
+// Récupérer une catégorie par ID
 export const getCategoryById = async (id: string): Promise<Category> => {
-  const response = await axios.get<Category>(`${API_BASE}/catalog/category/${id}`);
-  return response.data;
+  const res = await apiClient.get<Category>(`/catalog/category/${id}/`);
+  return res.data;
 };
 
+// Créer une nouvelle catégorie
 export const createCategory = async (data: {
   name: string;
   description?: string;
 }): Promise<Category> => {
-  const response = await axios.post(`${API_BASE}/catalog/category/`, data);
-  return response.data;
+  const res = await apiClient.post<Category>('/catalog/category/', data);
+  return res.data;
 };
