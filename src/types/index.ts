@@ -23,6 +23,7 @@ export interface Item {
   producers?: Person[];
   contributors?: Person[];
   created_by?: User;
+  created_at?: string;
   rating?: number;
   number_of_ratings?: number;
   popularity_score?: number;
