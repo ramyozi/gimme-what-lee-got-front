@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
-import {Link, useNavigate} from "react-router-dom";
-import { registerRequest } from "../../../../services/api/account.ts";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {loginRequest, registerRequest} from "../../../../services/api/account.ts";
+import {useAuth} from "../../../../lib/plugin/auth-provider/use-auth.ts";
 
 type RegisterFormInputs = {
   username: string;
@@ -12,19 +13,30 @@ type RegisterFormInputs = {
 };
 
 const RegisterForm: React.FC = () => {
+  const { login } = useAuth();
   const navigate = useNavigate()
+  const location = useLocation();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormInputs>();
 
+  const from =
+      (location.state as { from?: string })?.from ||
+      sessionStorage.getItem("lastVisitedPath") ||
+      "/";
+
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
       await registerRequest({
         ...data,
       });
-      navigate("/login");
+      login(
+        data.username,
+        data.password
+      );
+      navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
     }
