@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import {loginRequest, registerRequest} from "../../../../services/api/account.ts";
+import {registerRequest} from "../../../../services/api/account.ts";
 import {useAuth} from "../../../../lib/plugin/auth-provider/use-auth.ts";
 
 type RegisterFormInputs = {
