@@ -1,5 +1,11 @@
 import {apiClient} from "../../lib/plugin/auth-provider/api-client.tsx";
-import type { Item, SearchResponse } from '../../types';
+import type {Item, PaginatedResponse, SearchResponse} from '../../types';
+
+// Réponse paginée générique
+export const getItemsPaginated = async (): Promise<PaginatedResponse<Item>> => {
+  const res = await apiClient.get<PaginatedResponse<Item>>("/catalog/item/");
+  return res.data;
+};
 
 // Récupérer tous les items
 export const getItems = async (): Promise<Item[]> => {
@@ -63,5 +69,11 @@ export const searchItems = async (params: {
       page: params.page || 1,
     },
   });
+  return res.data;
+};
+
+// Suggestions
+export const getSuggestedItems = async (): Promise<Item[]> => {
+  const res = await apiClient.get<Item[]>("/catalog/item/suggestions/");
   return res.data;
 };

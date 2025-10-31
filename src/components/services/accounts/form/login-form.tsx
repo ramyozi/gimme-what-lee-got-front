@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { TextInput, PasswordInput, Button, Stack, Text } from "@mantine/core";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../../../lib/plugin/auth-provider/use-auth.ts";
 
 interface LoginFormInputs {
@@ -11,6 +11,14 @@ interface LoginFormInputs {
 export default function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Détermine la page vers laquelle rediriger après login
+  const from =
+      (location.state as { from?: string })?.from ||
+      sessionStorage.getItem("lastVisitedPath") ||
+      "/";
+
   const {
     register,
     handleSubmit,
@@ -19,8 +27,8 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await login(data.username, data.password);
-      navigate("/search");
+      login(data.username, data.password);
+      navigate(from, { replace: true });
     } catch (err) {
       console.error("Login failed", err);
     }
