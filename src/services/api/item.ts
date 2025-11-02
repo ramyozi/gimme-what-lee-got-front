@@ -72,8 +72,8 @@ export const searchItems = async (params: {
   return res.data;
 };
 
-// Suggestions
-export const getSuggestedItems = async (): Promise<Item[]> => {
-  const res = await apiClient.get<Item[]>("/catalog/item/suggestions/");
+// Recommendations
+export const getRecommendedItems = async (): Promise<Item[]> => {
+  const res = await apiClient.get<Item[]>("/catalog/item/recommendations/");
   return res.data;
 };
