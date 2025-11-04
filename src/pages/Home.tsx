@@ -17,6 +17,7 @@ import {useAuth} from "../lib/plugin/auth-provider/use-auth";
 import useSWR from "swr";
 import {getItemsPaginated, getRecommendedItems} from "../services/api/item";
 import type {Item} from "../types";
+import { Flame, Sparkles, Target } from "lucide-react";
 
 export default function Home() {
     const {user, logout} = useAuth();
@@ -90,7 +91,8 @@ export default function Home() {
                         {!isLoading && topComics && (
                             <Paper withBorder p="lg" radius="md" shadow="sm">
                                 <Title order={3} mb="sm">
-                                    🔥 Top Comics
+                                    <Flame size={20} color={"#FF6B6B"}/>
+                                    Top Comics
                                 </Title>
                                 <Table striped highlightOnHover>
                                     <Table.Thead>
@@ -121,7 +123,8 @@ export default function Home() {
                         {!isLoading && newestComics && (
                             <Paper withBorder p="lg" radius="md" shadow="sm">
                                 <Title order={3} mb="sm">
-                                    🆕 Newly Added
+                                    <Sparkles size={20} color="#4dabf7" />
+                                    Newly Added
                                 </Title>
                                 <Table striped highlightOnHover>
                                     <Table.Thead>
@@ -152,7 +155,8 @@ export default function Home() {
                 <Grid.Col span={{base: 12, md: 3}}>
                     <Paper withBorder p="lg" radius="md" shadow="sm">
                         <Title order={4} mb="sm">
-                            🎯 Suggested for You
+                            <Target size={18} color="#40c057" />
+                            Suggested for You
                         </Title>
 
                         {user ? (

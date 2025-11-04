@@ -25,7 +25,7 @@ export const router = createBrowserRouter(
       <Route path="login" element={withSuspense(<Login />)} />
       <Route path="register" element={withSuspense(<Register />)} />
       <Route path="search" element={withSuspense(<Search />)} />
-        <Route path="item/:id" element={withSuspense(<ItemDetail />)} />
+      <Route path="item/:id" element={withSuspense(<ItemDetail />)} />
 
 
       {/* User protected */}
