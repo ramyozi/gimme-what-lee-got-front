@@ -15,8 +15,9 @@ import {
 } from "@mantine/core";
 import {useAuth} from "../lib/plugin/auth-provider/use-auth";
 import useSWR from "swr";
-import {getItemsPaginated, getSuggestedItems} from "../services/api/item";
+import {getItemsPaginated, getRecommendedItems} from "../services/api/item";
 import type {Item} from "../types";
+import { Flame, Sparkles, Target } from "lucide-react";
 
 export default function Home() {
     const {user, logout} = useAuth();
@@ -29,10 +30,11 @@ export default function Home() {
     const items = paginated?.results ?? [];
 
     // fetch des suggestions
-    const {data: suggested, isLoading: loadingSuggestions} = useSWR<Item[]>(
-        user ? "/catalog/item/suggestions/" : null,
-        getSuggestedItems
-    );
+      const {
+    data: recommended,
+    isLoading: loadingRecommendations,
+    error: recommendationError,
+  } = useSWR<Item[]>(user ? "/catalog/item/recommendations/" : null, getRecommendedItems);
 
 
     // Trier la list
@@ -89,7 +91,8 @@ export default function Home() {
                         {!isLoading && topComics && (
                             <Paper withBorder p="lg" radius="md" shadow="sm">
                                 <Title order={3} mb="sm">
-                                    🔥 Top Comics
+                                    <Flame size={20} color={"#FF6B6B"}/>
+                                    Top Comics
                                 </Title>
                                 <Table striped highlightOnHover>
                                     <Table.Thead>
@@ -120,7 +123,8 @@ export default function Home() {
                         {!isLoading && newestComics && (
                             <Paper withBorder p="lg" radius="md" shadow="sm">
                                 <Title order={3} mb="sm">
-                                    🆕 Newly Added
+                                    <Sparkles size={20} color="#4dabf7" />
+                                    Newly Added
                                 </Title>
                                 <Table striped highlightOnHover>
                                     <Table.Thead>
@@ -151,17 +155,22 @@ export default function Home() {
                 <Grid.Col span={{base: 12, md: 3}}>
                     <Paper withBorder p="lg" radius="md" shadow="sm">
                         <Title order={4} mb="sm">
-                            🎯 Suggested for You
+                            <Target size={18} color="#40c057" />
+                            Suggested for You
                         </Title>
 
                         {user ? (
-                            loadingSuggestions ? (
+                            loadingRecommendations ? (
                                 <Group justify="center" p="md">
-                                    <Loader size="sm"/>
+                                <Loader size="sm" />
                                 </Group>
-                            ) : suggested && suggested.length > 0 ? (
+                            ) : recommendationError ? (
+                                <Text color="red" size="sm" ta="center">
+                                    Failed to load recommendations.
+                                </Text>
+                            ) : recommended && recommended.length > 0 ? (
                                 <Stack gap="xs">
-                                    {suggested.map((s) => (
+                                    {recommended.slice(0, 5).map((s) => (    
                                         <Card
                                             key={s.id}
                                             withBorder
@@ -170,13 +179,38 @@ export default function Home() {
                                             p="sm"
                                             component="a"
                                             href={`/item/${s.id}`}
-                                        >
-                                            <Text fw={500} size="sm" truncate="end">
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "0.6rem",
+                                                textDecoration: "none",
+                                                transition: "background-color 0.15s ease",
+                                            }}
+                                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f8f9fa")}
+                                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                                            >
+                                            {s.image && (
+                                                <img
+                                                src={s.image}
+                                                alt={s.title}
+                                                style={{
+                                                    width: 40,
+                                                    height: 40,
+                                                    objectFit: "cover",
+                                                    borderRadius: 6,
+                                                    flexShrink: 0,
+                                                }}
+                                                />
+                                            )}
+
+                                            <div style={{ flex: 1, minWidth: 0 }}>
+                                                <Text fw={500} size="sm" truncate="end">
                                                 {s.title}
-                                            </Text>
-                                            <Text size="xs" color="dimmed">
+                                                </Text>
+                                                <Text size="xs" color="dimmed" truncate="end">
                                                 {s.category?.name ?? "Uncategorized"}
-                                            </Text>
+                                                </Text>
+                                            </div>
                                         </Card>
                                     ))}
                                 </Stack>
