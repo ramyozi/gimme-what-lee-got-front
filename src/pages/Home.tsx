@@ -18,9 +18,12 @@ import useSWR from "swr";
 import {getItemsPaginated, getRecommendedItems} from "../services/api/item";
 import type {Item} from "../types";
 import { Flame, Sparkles, Target } from "lucide-react";
+import {useEffect, useState} from "react";
+import {getUserDisplayName} from "../lib/utils/get-user-display-name.ts";
 
 export default function Home() {
     const {user, logout} = useAuth();
+    const [displayName, setDisplayName] = useState<string | undefined>(undefined);
 
     // fetch des items
     const {data: paginated, error, isLoading} = useSWR(
@@ -52,6 +55,10 @@ export default function Home() {
         )
         .slice(0, 5);
 
+    useEffect(() => {
+        setDisplayName(getUserDisplayName(user));
+    }, [user]);
+
     return (
         <AppShell padding="xl">
             <Grid gutter="xl">
@@ -60,7 +67,7 @@ export default function Home() {
                         <Paper withBorder p="lg" radius="md" shadow="xs">
                             <Group justify="space-between">
                                 <div>
-                                    <Title order={2}>Welcome back, {user.username}</Title>
+                                    <Title order={2}>Welcome back, {displayName}</Title>
                                     <Text color="dimmed" size="sm">
                                         Explore trending and new comics based on your interests.
                                     </Text>
