@@ -16,6 +16,7 @@ import {
     Divider,
     Loader,
     Rating,
+    ScrollArea,
 } from "@mantine/core";
 import { Heart, Bookmark, ExternalLink } from "lucide-react";
 import { getItemById } from "../services/api/item";
@@ -106,6 +107,15 @@ export default function ItemDetail() {
     if (error) return <Text color="red">Error loading item</Text>;
     if (!item) return <Text>Item not found</Text>;
 
+
+    const cleanedDescription = item.description
+        ? item.description
+            .replace(/<br\s*\/?>/gi, "\n") // Convert <br> to line breaks
+            .replace(/<\/p>\s*<p>/gi, "\n\n") // Separate paragraphs
+            .replace(/<[^>]+>/g, "") // Remove other tags
+            .trim()
+        : "No description available.";
+    
     return (
         <Paper p="xl" withBorder radius="md" shadow="sm">
             <Grid gutter="xl">
@@ -168,7 +178,19 @@ export default function ItemDetail() {
                         </Text>
 
                         <Divider />
-                        <Text lh={1.6}>{item.description}</Text>
+
+                        <ScrollArea.Autosize mah={240}>
+                            <Text
+                                lh={1.6}
+                                size="sm"
+                                style={{
+                                    whiteSpace: "pre-line",
+                                    wordBreak: "break-word",
+                                }}
+                            >
+                                {cleanedDescription}
+                            </Text>
+                        </ScrollArea.Autosize>
 
                         <Divider variant="dashed" />
 
@@ -251,7 +273,6 @@ export default function ItemDetail() {
                     <ManagePeopleForItemForm item={item} onSuccess={closeModal} />
                 )}
             </Modal>
-
         </Paper>
     );
 }
